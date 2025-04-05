@@ -12,5 +12,9 @@
   },
   "devDependencies": {
     "electron": "^35.1.4"
+  },
+  "dependencies": {
+    "csv": "^6.3.11",
+    "pdfreader": "^3.0.7"
   }
 }

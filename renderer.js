@@ -17,8 +17,9 @@ setButton.addEventListener("click", () => {
 const fileOpen = document.getElementById("fileopen");
 const filePathElement = document.getElementById("filePath");
 fileOpen.addEventListener("click", async () => {
-  const filePath = await window.electronAPI.openFile();
-  filePathElement.innerText = filePath;
+  const lines = await window.electronAPI.openFile();
+  console.log(lines);
+  filePathElement.innerText = lines;
 });
 
 const counter = document.getElementById("counter");
