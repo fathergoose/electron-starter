@@ -1,3 +1,5 @@
+import DataTable from "datatables.net-dt";
+
 const information = document.getElementById("info");
 information.innerText = `This app is running Chrome v${versions.chrome()}, node v${versions.node()} and electron v${versions.electron()} `;
 
@@ -7,7 +9,6 @@ const func = async () => {
 };
 
 func();
-
 const setButton = document.getElementById("btn");
 const titleInput = document.getElementById("title");
 setButton.addEventListener("click", () => {
@@ -17,7 +18,14 @@ setButton.addEventListener("click", () => {
 const fileOpen = document.getElementById("fileopen");
 const filePathElement = document.getElementById("filePath");
 fileOpen.addEventListener("click", async () => {
-  const lines = await window.electronAPI.openFile();
+  const rows = await window.electronAPI.openFile();
+  new DataTable("#example", {
+    columns: rows[0].map((header) => ({
+      title: header,
+    })),
+    data: rows.slice(1),
+  });
+
   console.log(lines);
   filePathElement.innerText = lines;
 });

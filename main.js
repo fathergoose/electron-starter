@@ -2,33 +2,17 @@ const { app, BrowserWindow, ipcMain, dialog, Menu } = require("electron");
 const path = require("node:path");
 const pdf = require("pdfreader");
 const csv = require("csv");
+const fs = require("fs");
+const fsPromises = fs.promises;
 
 async function handleFileOpen() {
   const { canceled, filePaths } = await dialog.showOpenDialog({});
   if (!canceled) {
-    const items = [];
-    await new Promise((resolve, reject) => {
-      new pdf.PdfReader().parseFileItems(filePaths[0], (err, item) => {
-        if (err) reject();
-        else if (!item) resolve();
-        else if (item.text) items.push(item);
-      });
+    const contents = await fsPromises.readFile(filePaths[0]);
+    csv.parse(contents, {}, (err, records) => {
+      console.log(records);
+      return records;
     });
-    const lines = [];
-    let index = -1;
-    items.reduce(
-      (prev, curr) => {
-        if (curr.y === prev.y) {
-          lines[index].push(curr.text);
-        } else {
-          index += 1;
-          lines[index] = [curr.text];
-        }
-        return curr;
-      },
-      { y: -1 },
-    );
-    return items;
   }
 }
 const createWindow = () => {
